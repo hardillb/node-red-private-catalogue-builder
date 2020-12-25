@@ -1,3 +1,4 @@
+const cors = require('cors');
 const http = require('http')
 const morgan = require('morgan')
 const express = require('express')
@@ -80,7 +81,7 @@ app.post('/update', (req, res, next) => {
 	res.status(200).send();
 })
 
-app.get('/catalogue.json', (req, res, next) => {
+app.get('/catalogue.json', cors(), (req, res, next) => {
 	res.send(catalogue)
 })
 
