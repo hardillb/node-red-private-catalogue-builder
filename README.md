@@ -30,6 +30,16 @@ notify:
   content: '{"name": "{{name}}", "versions": "{{versions}}", "dist-tags": "{{dist-tags}}"}'
 ```
 
+## Build
+
+Build and push the container to the private container repository.
+
+```
+$ docker build . -t catalogue
+$ docker tag catalogue private.example.com/catalogue
+$ docker push private.example.com/catalogue
+```
+
 ## Deploy
 
 ### Docker-compose
