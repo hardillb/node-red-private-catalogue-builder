@@ -91,5 +91,5 @@ update()
 
 const server = http.Server(app);
 server.listen(port, listenHost, function(){
-	console.log(util.format('App listening on  %s:%d!', listenHost, port));
+	console.log('App listening on  %s:%d!', listenHost, port);
 });
