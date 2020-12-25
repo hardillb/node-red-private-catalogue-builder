@@ -74,7 +74,7 @@ app.use(bodyParser.json())
 
 app.post('/update', (req, res, next) => {
 	const updateRequest = req.body
-	consolelog(JSON.stringify(updateRequest,null, 2))
+	console.log(JSON.stringify(updateRequest,null, 2))
 
 	update()
 	res.status(200).send();
