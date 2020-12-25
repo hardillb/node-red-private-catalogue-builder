@@ -73,7 +73,8 @@ app.use(morgan("combined"))
 app.use(bodyParser.json())
 
 app.post('/update', (req, res, next) => {
-	const update = req.body
+	const updateRequest = req.body
+	consolelog(JSON.stringify(updateRequest,null, 2))
 
 	update()
 	res.status(200).send();
