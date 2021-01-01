@@ -5,6 +5,6 @@ COPY package*.json ./
 RUN npm install --no-fund --no-update-notifier
 COPY . .
 
-EXPOSE 3000
+EXPOSE 80
 
 CMD [ "node", "index.js" ]

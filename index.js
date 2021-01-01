@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const superagent = require('superagent')
 
 
-const port = (process.env.PORT || 3000)
+const port = (process.env.PORT || 80)
 const listenHost = (process.env.HOST || '0.0.0.0')
 const registryHost = (process.env.REGISTRY || 'registry:4873') 
 const keyword = "node-red"
