@@ -9,7 +9,7 @@ const superagent = require('superagent')
 const port = (process.env.PORT || 80)
 const listenHost = (process.env.HOST || '0.0.0.0')
 const registryHost = (process.env.REGISTRY || 'registry:4873') 
-const keyword = "node-red"
+const keyword = (process.env.KEYWORD || "node-red")
 
 const url = "http://" + registryHost +  "/-/all"
 
