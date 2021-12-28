@@ -1,9 +1,12 @@
-const cors = require('cors');
+const fs = require('fs')
+const cors = require('cors')
+const path = require('path')
 const http = require('http')
 const morgan = require('morgan')
 const express = require('express')
 const bodyParser = require('body-parser')
 const superagent = require('superagent')
+const nodeRedModule = require('node-red-module-parser')
 
 
 const port = (process.env.PORT || 80)
@@ -37,7 +40,7 @@ function update() {
 	catalogue.modules = [];
 
 	superagent.get(url)
-	.end((err, res) => {
+	.end(async (err, res) => {
 		if (!err) {
 			const nodes = res.body;
 			var nodeNames = Object.keys(nodes);
@@ -48,16 +51,41 @@ function update() {
 
 			for (const node in nodeNames) {
 				var n = nodes[nodeNames[node]];
-				if (n.keywords.indexOf(keyword) != -1) {
-					var entry = {
-						id: n.name,
-						version: n["dist-tags"].latest,
-						description: n.description,
-						keywords: n.keywords,
-						updated_at: n.time.modified,
-						url: "http://" + registryHost + "/-/web/details/" + n.name
+				if (n.keywords) {
+					if (n.keywords.indexOf(keyword) != -1) {
+						try {
+						  let details = await superagent
+						  	.get("http://" + registryHost + "/" + nodeNames[node])
+						  	.set('accept', 'json')
+						  let latest = details.body['dist-tags'].latest
+						  let version = details.body.versions[latest]
+						  let tar = version.dist.tarball
+						  fs.mkdirSync(path.dirname(path.join("temp", nodeNames[node])))
+						  let tarPath = path.join('temp', nodeNames[node] + ".tgz")
+						  let tarRes = await superagent.get(tar).responseType('blob')
+						  fs.writeFileSync(tarPath, tarRes.body)
+						  let moduleDetails = nodeRedModule.examinTar(tarPath, "temp")
+						  fs.rmSync(tarPath)
+
+						  var entry = {
+								id: n.name,
+								version: n["dist-tags"].latest,
+								description: n.description,
+								keywords: n.keywords,
+								updated_at: n.time.modified,
+								url: "http://" + registryHost + "/-/web/details/" + n.name
+							}
+
+							if (moduleDetails.types) {
+								entry.types = moduleDetails.types
+							}
+							if (moduleDetails["node-red"]) {
+								catalogue.modules.push(entry)
+							}
+						} catch (e) {
+							console.log("err",e)
+						}
 					}
-					catalogue.modules.push(entry)
 				}
 			}
 
