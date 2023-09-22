@@ -11,10 +11,10 @@ const nodeRedModule = require('node-red-module-parser')
 
 const port = (process.env.PORT || 80)
 const listenHost = (process.env.HOST || '0.0.0.0')
-const registryHost = (process.env.REGISTRY || 'registry:4873') 
+const registryHost = (process.env.REGISTRY || 'http://registry:4873') 
 const keyword = (process.env.KEYWORD || "node-red")
 
-const url = "http://" + registryHost +  "/-/all"
+const url = registryHost +  "/-/all"
 
 const catalogue = {
   "name":"Ben's custom catalogue",
