@@ -61,7 +61,6 @@ function update() {
 						  let version = details.body.versions[latest]
 						  let tar = version.dist.tarball
 						  let tarDir = path.join("temp", nodeNames[node])
-						  console.log(tarDir)
 						  fs.mkdirSync(tarDir,{recursive: true})
 						  let tarPath = path.join(tarDir, nodeNames[node].split('/').slice(-1) + ".tgz")
 						  console.log(tarPath)
