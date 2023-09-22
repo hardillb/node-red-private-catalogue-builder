@@ -11,10 +11,10 @@ const nodeRedModule = require('node-red-module-parser')
 
 const port = (process.env.PORT || 80)
 const listenHost = (process.env.HOST || '0.0.0.0')
-const registryHost = (process.env.REGISTRY || 'registry:4873') 
+const registryHost = (process.env.REGISTRY || 'http://registry:4873') 
 const keyword = (process.env.KEYWORD || "node-red")
 
-const url = "http://" + registryHost +  "/-/all"
+const url = registryHost +  "/-/all"
 
 const catalogue = {
   "name":"Ben's custom catalogue",
@@ -60,12 +60,13 @@ function update() {
 						  let latest = details.body['dist-tags'].latest
 						  let version = details.body.versions[latest]
 						  let tar = version.dist.tarball
-						  fs.mkdirSync(path.dirname(path.join("temp", nodeNames[node])))
-						  let tarPath = path.join('temp', nodeNames[node] + ".tgz")
+						  let tarDir = path.join("temp", nodeNames[node])
+						  fs.mkdirSync(tarDir,{recursive: true})
+						  let tarPath = path.join(tarDir, nodeNames[node].split('/').slice(-1) + ".tgz")
 						  let tarRes = await superagent.get(tar).responseType('blob')
 						  fs.writeFileSync(tarPath, tarRes.body)
-						  let moduleDetails = nodeRedModule.examinTar(tarPath, "temp")
-						  fs.rmSync(tarPath)
+						  let moduleDetails = nodeRedModule.examinTar(tarPath, tarDir)
+						  fs.rmSync(tarDir, {force: true, recursive: true})
 
 						  var entry = {
 								id: n.name,
@@ -76,7 +77,7 @@ function update() {
 								url: "http://" + registryHost + "/-/web/details/" + n.name
 							}
 
-							if (moduleDetails.types) {
+							if (moduleDetails.types.length) {
 								entry.types = moduleDetails.types
 							}
 							if (moduleDetails["node-red"]) {
