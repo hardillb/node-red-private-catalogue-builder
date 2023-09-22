@@ -60,7 +60,7 @@ function update() {
 						  let latest = details.body['dist-tags'].latest
 						  let version = details.body.versions[latest]
 						  let tar = version.dist.tarball
-						  fs.mkdirSync(path.dirname(path.join("temp", nodeNames[node])))
+						  fs.mkdirSync(path.dirname(path.join("temp", nodeNames[node])),{recursive: true})
 						  let tarPath = path.join('temp', nodeNames[node] + ".tgz")
 						  let tarRes = await superagent.get(tar).responseType('blob')
 						  fs.writeFileSync(tarPath, tarRes.body)
