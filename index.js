@@ -77,7 +77,7 @@ function update() {
 								url: "http://" + registryHost + "/-/web/details/" + n.name
 							}
 
-							if (moduleDetails.types.length !== 0) {
+							if (moduleDetails.types.length) {
 								entry.types = moduleDetails.types
 							}
 							if (moduleDetails["node-red"]) {
