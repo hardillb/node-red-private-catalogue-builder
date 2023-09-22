@@ -61,14 +61,12 @@ function update() {
 						  let version = details.body.versions[latest]
 						  let tar = version.dist.tarball
 						  let tarDir = path.join("temp", nodeNames[node])
-						  console.log(tarDir)
 						  fs.mkdirSync(tarDir,{recursive: true})
 						  let tarPath = path.join(tarDir, nodeNames[node].split('/').slice(-1) + ".tgz")
-						  console.log(tarPath)
 						  let tarRes = await superagent.get(tar).responseType('blob')
 						  fs.writeFileSync(tarPath, tarRes.body)
-						  let moduleDetails = nodeRedModule.examinTar(tarPath, "temp")
-						  fs.rmSync(tarPath)
+						  let moduleDetails = nodeRedModule.examinTar(tarPath, tarDir)
+						  fs.rmSync(tarDir, {force: true, recursive: true})
 
 						  var entry = {
 								id: n.name,
@@ -79,7 +77,7 @@ function update() {
 								url: "http://" + registryHost + "/-/web/details/" + n.name
 							}
 
-							if (moduleDetails.types) {
+							if (moduleDetails.types.length !== 0) {
 								entry.types = moduleDetails.types
 							}
 							if (moduleDetails["node-red"]) {
