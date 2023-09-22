@@ -63,7 +63,6 @@ function update() {
 						  let tarDir = path.join("temp", nodeNames[node])
 						  fs.mkdirSync(tarDir,{recursive: true})
 						  let tarPath = path.join(tarDir, nodeNames[node].split('/').slice(-1) + ".tgz")
-						  console.log(tarPath)
 						  let tarRes = await superagent.get(tar).responseType('blob')
 						  fs.writeFileSync(tarPath, tarRes.body)
 						  let moduleDetails = nodeRedModule.examinTar(tarPath, "temp")
