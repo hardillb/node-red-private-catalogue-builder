@@ -14,7 +14,8 @@ const listenHost = (process.env.HOST || '0.0.0.0')
 const registryHost = (process.env.REGISTRY || 'http://registry:4873') 
 const keyword = (process.env.KEYWORD || "node-red")
 
-const url = registryHost +  "/-/all"
+// const url = registryHost +  "/-/all"
+const url = registryHost + "/-/v1/search"
 
 const catalogue = {
   "name":"Ben's custom catalogue",
@@ -42,20 +43,20 @@ function update() {
 	superagent.get(url)
 	.end(async (err, res) => {
 		if (!err) {
-			const nodes = res.body;
+			const nodes = res.body.objects;
 			var nodeNames = Object.keys(nodes);
-			const index = nodeNames.indexOf("_updated");
-			if (index > -1) {
-			  nodeNames.splice(index, 1);
-			}
 
 			for (const node in nodeNames) {
-				var n = nodes[nodeNames[node]];
+				// var n = nodes[nodeNames[node]];
+				if (node === undefined) {
+					continue;
+				}
+				var n = nodes[node].package;
 				if (n.keywords) {
 					if (n.keywords.indexOf(keyword) != -1) {
 						try {
 						  let details = await superagent
-						  	.get("http://" + registryHost + "/" + nodeNames[node])
+						  	.get(registryHost + "/" + n.name)
 						  	.set('accept', 'json')
 						  let latest = details.body['dist-tags'].latest
 						  let version = details.body.versions[latest]
