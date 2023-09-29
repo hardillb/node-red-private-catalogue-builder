@@ -75,7 +75,7 @@ function update() {
 								description: n.description,
 								keywords: n.keywords,
 								updated_at: n.time.modified,
-								url: "http://" + registryHost + "/-/web/details/" + n.name
+								url: registryHost + "/-/web/details/" + n.name
 							}
 
 							if (moduleDetails.types.length) {
