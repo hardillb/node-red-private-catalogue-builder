@@ -25,7 +25,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
-    "node-red-module-parser": "github:hardillb/node-red-module-parser",
-    "superagent": "^6.1.0"
+    "node-red-module-parser": "git+https://git@github.com/hardillb/node-red-module-parser",
+    "superagent": "^7.0.2"
   }
 }
